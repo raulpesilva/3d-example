@@ -27,9 +27,12 @@ function Box() {
   const { nodes, materials } = useGLTF('/reexporthouse.gltf', true);
   const [hovered, hover] = useState<string | null>(null);
   const [clicked, setClicked] = useSelectedHouse();
-  const debouncedHover = useCallback(debounce(hover, 30), [hover, debounce]);
-  const over = (name: string) => (e: ThreeEvent<PointerEvent>) => (e.stopPropagation(), debouncedHover(name));
-  const out = () => debouncedHover(null);
+  const debouncedHover = useCallback(() => debounce(hover, 30), [hover]);
+  const over = (name: string) => (e: ThreeEvent<PointerEvent>) => {
+    e.stopPropagation();
+    debouncedHover()(name);
+  };
+  const out = () => debouncedHover()(null);
   const state = useThree();
   const click = (name: string) => (e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
