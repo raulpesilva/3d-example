@@ -3,7 +3,7 @@ import Footer from '@/components/footer-two';
 import Header from '@/components/Header';
 import { useSelectedHouse, useSelectedHouseSelect } from '@/states';
 import { Bvh, useGLTF } from '@react-three/drei';
-import { Canvas, useFrame, useThree, type ThreeElements, type ThreeEvent } from '@react-three/fiber';
+import { Canvas, useFrame, useThree, type ThreeEvent } from '@react-three/fiber';
 import { EffectComposer, Outline, Select, Selection } from '@react-three/postprocessing';
 import { debounce } from 'lodash';
 import { easing } from 'maath';
@@ -31,11 +31,11 @@ function Effects() {
   );
 }
 
-function Box(props: ThreeElements['mesh']) {
+function Box() {
   const { nodes, materials } = useGLTF('/reexporthouse.gltf', true);
   const [hovered, hover] = useState<string | null>(null);
   const [clicked, setClicked] = useSelectedHouse();
-  const debouncedHover = useCallback(debounce(hover, 30), []);
+  const debouncedHover = useCallback(debounce(hover, 30), [hover]);
   const over = (name: string) => (e: ThreeEvent<PointerEvent>) => (e.stopPropagation(), debouncedHover(name));
   const out = () => debouncedHover(null);
   const click = (name: string) => (e: ThreeEvent<PointerEvent>) => {

@@ -3,12 +3,12 @@ import Footer from '@/components/footer-two';
 import Header from '@/components/Header';
 import { useSelectedHouse, useSelectedHouseSelect } from '@/states';
 import { Bvh, OrbitControls, useGLTF } from '@react-three/drei';
-import { Canvas, useThree, type ThreeElements, type ThreeEvent } from '@react-three/fiber';
+import { Canvas, useThree, type ThreeEvent } from '@react-three/fiber';
 import { EffectComposer, Outline, Select, Selection } from '@react-three/postprocessing';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
 import Balancer from 'react-wrap-balancer';
-import { Euler, PerspectiveCamera as ThreePerspectiveCamera, Vector3 } from 'three';
+import { Euler, Vector3 } from 'three';
 
 function Effects() {
   const { size } = useThree();
@@ -23,11 +23,11 @@ function Effects() {
   );
 }
 
-function Box(props: ThreeElements['mesh']) {
+function Box() {
   const { nodes, materials } = useGLTF('/reexporthouse.gltf', true);
   const [hovered, hover] = useState<string | null>(null);
   const [clicked, setClicked] = useSelectedHouse();
-  const debouncedHover = useCallback(debounce(hover, 30), []);
+  const debouncedHover = useCallback(debounce(hover, 30), [hover, debounce]);
   const over = (name: string) => (e: ThreeEvent<PointerEvent>) => (e.stopPropagation(), debouncedHover(name));
   const out = () => debouncedHover(null);
   const state = useThree();
@@ -102,10 +102,10 @@ function Box(props: ThreeElements['mesh']) {
   );
 }
 
-const CameraHelper = () => {
-  const camera = new ThreePerspectiveCamera(60, 1, 1, 3);
-  return <cameraHelper args={[camera]} />;
-};
+// const CameraHelper = () => {
+//   const camera = new ThreePerspectiveCamera(60, 1, 1, 3);
+//   return <cameraHelper args={[camera]} />;
+// };
 
 export const Drag = () => {
   const selectedHouse = useSelectedHouseSelect();
